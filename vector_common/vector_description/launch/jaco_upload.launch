@@ -1,8 +1,20 @@
 <?xml version="1.0"?>
 <launch>
+  <!-- Joint state publisher gui -->
+    <arg name="gui" default="false" />
     <!--arg name="two_arms" default="false"/>
     <arg name="has_gripper" default="true"/>
         
     <param name="robot_description" command="$(find xacro)/xacro.py '$(find vector_description)/urdf/jaco_standalone.urdf.xacro' two_arms:=$(arg two_arms) has_gripper:=$(arg has_gripper)" /-->
     <param name="robot_description" command="$(find xacro)/xacro.py '$(find vector_description)/urdf/jaco_standalone.urdf.xacro'" />
+      <!-- State publishers -->
+      <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="50" />
+      </node>
+       <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <param name="use_gui" value="$(arg gui)" />
+        <rosparam param="source_list">[joint_states]</rosparam>
+      </node>
+      <node pkg="rviz" name="rviz" type="rviz" args="-d /home/joshting/.rviz/recordtraj.rviz"/>
+
 </launch>
